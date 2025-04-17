@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width,    initial-scale=1" />
+      <title>Gestion de Produits</title>
+      <link href="css/styles.css" rel="stylesheet" />
+    </head>
+    <body>
+      <nav>
+        <ul>
+          <li><a href="#mes-produits">Mes Produits</a></li>
+        </ul>
+      </nav>
+
+      <header class="masthead">
+        <div class="masthead-heading">Bienvenue sur votre gestionnaire de produits</div>
+      </header>
+
+      <main class="main-content">
+        <!-- Section MES PRODUITS -->
+        <section id="mes-produits">
+          <h1>Mes Produits</h1>
+
+          <div class="search-bar">
+            <form class="search-form">
+              <input type="text" class="form-control" placeholder="Rechercher par Code Article" required />
+              <button class="btn" type="submit">Rechercher</button>
+            </form>
+            <button class="btn btn-ajouter" id="open-ajouter">+Ajouter un Produit</button>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Libellé</th>
+                  <th>Stock alerte</th>
+                  <th>Stock physique</th>
+                  <th>Quantité annuelle</th>
+                  <th>Unité</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tableau">
+                <tr class="no-result">
+                  <td colspan="7">Aucun produit trouvé.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        Projet PAPYRUS - CRUD Produit
+      </footer>
+      <!-- Modale Ajouter un Produit -->
+        <div id="modal-ajouter" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="fermerModal('modal-ajouter')">
+                    &times;
+                </span>
+                <h2>Ajouter un Produit</h2>
+                <form class="form-ajouter" id="form-ajouter">
+                    <input type="text" id="codart" placeholder="Code article" required />
+                    <input type="text" id="libart" placeholder="Libellé" required />
+                    <input type="number" id="stkale" placeholder="Stock alerte" required />
+                    <input type="number" id="stkphy" placeholder="Stock physique" required />
+                    <input type="number" id="qteann" placeholder="Quantité annuelle" required />
+                    <input type="text" id="unimes" placeholder="Unité" required />
+                    <button class="btn" type="submit">Ajouter</button>
+                  </form>                  
+            </div>
+        </div>
+  
+        <!-- Modale Modifier un Produit -->
+        <div id="modal-modifier" class="modal">
+          <div class="modal-content">
+                <span class="close" onclick="fermerModal('modal-modifier')">
+                &times;
+                </span>
+                <h2>Modifier un Produit</h2>
+                <form class="form-modifier">
+                    <input type="text" placeholder="Code article" required />
+                    <input type="text" placeholder="Libellé" required />
+                    <input type="number" placeholder="Stock alerte" required />
+                    <input type="number" placeholder="Stock physique" required />
+                    <input type="number" placeholder="Quantité annuelle" required />
+                    <input type="text" placeholder="Unité" required />
+                    <button class="btn" type="submit">Enregistrer</button>
+                </form>
+            </div>
+        </div>
+  
+        <!-- Modale Confirmation Suppression -->
+        <div id="modal-confirmation" class="modal">
+          <div class="modal-content">
+                <span class="close" onclick="fermerModal('modal-confirmation')">
+                    &times;
+                </span>
+                <h2>Êtes-vous sûr de vouloir supprimer ce produit ?</h2>
+                <div style="display: flex; justify-content: space-around; margin-top: 20px;">
+                    <button class="btn btn-danger" id="btn-confirm-supprimer">Oui, supprimer</button>
+                    <button class="btn" onclick="fermerModal('modal-confirmation')">Annuler</button>
+                </div>
+          </div>
+        </div>
+
+        <script src="js/modals.js"></script>
+        <script src="js/scripts.js"></script>
+    </body>
+</html>
