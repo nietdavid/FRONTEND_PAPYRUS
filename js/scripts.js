@@ -1,7 +1,7 @@
 // === URL de l'API ===
 const url = 'https://localhost:44384/Produit';
 
-// === AU CHARGEMENT : Requête GET pour afficher les produits dans le tableau ===
+//AU CHARGEMENT : Requête GET pour afficher les produits dans le tableau
 fetch(url)
   .then((resp) => {
     if (!resp.ok) {
@@ -18,7 +18,7 @@ fetch(url)
     console.error('Erreur lors du chargement des produits :', error);
   });
 
-// === Fonction pour créer une ligne dans le tableau avec un produit ===
+// Fonction pour créer une ligne dans le tableau avec un produit
 function initTableau(produit) {
   const tableau = document.getElementById('tableau');
 
@@ -39,7 +39,7 @@ function initTableau(produit) {
   tdQte.textContent = produit.qteann;
   tdUnit.textContent = produit.unimes;
 
-  // === Bouton Modifier ===
+  // Bouton Modifier
   const btnModifier = document.createElement("button");
   btnModifier.className = "btn action-btn";
   btnModifier.textContent = "Modifier";
@@ -48,21 +48,42 @@ function initTableau(produit) {
     // À compléter : pré-remplissage des champs de la modale avec les données du produit
   });
 
-  // === Bouton Supprimer ===
+  // Bouton Supprimer
   const btnSupprimer = document.createElement("button");
   btnSupprimer.className = "btn btn-danger";
   btnSupprimer.textContent = "Supprimer";
+
+  // Ajout d'un event listener sur le bouton "Supprimer" pour chaque ligne de produit
   btnSupprimer.addEventListener("click", function () {
+    // Ouvre la modale de confirmation
     ouvrirModal("modal-confirmation");
 
-    // Lors de la confirmation, on supprime la ligne du tableau
+    // Récupère le bouton de confirmation dans la modale
     const confirmer = document.getElementById("btn-confirm-supprimer");
+
+    // Associe une action lors du clic sur le bouton "Confirmer la suppression"
     confirmer.onclick = function () {
-      tr.remove();
-      fermerModal("modal-confirmation");
-      // Optionnel : envoyer une requête DELETE à l'API
+        // Envoie une requête DELETE vers l'API avec le codart du produit à supprimer
+        fetch(url, {
+            method: 'DELETE', // Méthode HTTP DELETE
+            headers: {
+                'Content-Type': 'application/json' // Indique qu'on envoie du JSON
+            },
+            body: JSON.stringify({ codart: produit.codart }) // On envoie l'objet Produit (ici juste codart)
+        })
+        .then(response => {
+            // Vérifie si la réponse de l'API est OK (succès)
+            if (!response.ok) {
+                // Si erreur, lève une exception avec le message d'erreur HTTP
+                throw new Error('Erreur lors de la suppression : ' + response.statusText);
+            }
+            // Si la suppression a réussi côté API :
+            tr.remove(); // Supprime la ligne <tr> correspondante dans le tableau HTML (côté frontend)
+            fermerModal("modal-confirmation"); // Ferme la modale de confirmation
+        })
+        .catch(error => console.error(error)); // En cas d'erreur réseau ou autre, affiche l'erreur dans la console
     };
-  });
+});
 
   tdActions.appendChild(btnModifier);
   tdActions.appendChild(btnSupprimer);
@@ -79,7 +100,7 @@ function initTableau(produit) {
   tableau.appendChild(tr); // Ajoute la ligne au tableau
 }
 
-// === GESTION DU FORMULAIRE AJOUTER ===
+// GESTION DU FORMULAIRE AJOUTER
 const formAjout = document.getElementById('form-ajouter');
 
 formAjout.addEventListener('submit', function (e) {
@@ -94,6 +115,21 @@ formAjout.addEventListener('submit', function (e) {
     qteann: parseInt(document.getElementById('qteann').value),
     unimes: document.getElementById('unimes').value
   };
+  // Vérifications des longueurs avant l'envoi du POST
+  if (nouveauProduit.codart.length > 4) {
+  alert("Le code article (CODART) ne doit pas dépasser 4 caractères !");
+  return;
+  }
+
+  if (nouveauProduit.libart.length > 25) {
+  alert("Le libellé de l'article (LIBART) ne doit pas dépasser 25 caractères !");
+  return;
+  }
+
+  if (nouveauProduit.unimes.length > 5) {
+  alert("L'unité de mesure (UNIMES) ne doit pas dépasser 5 caractères !");
+  return;
+  }
 
   // Envoi de la requête POST vers l'API
   fetch(url, {
